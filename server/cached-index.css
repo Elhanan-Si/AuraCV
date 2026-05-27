@@ -1,0 +1,19 @@
+/* Minimal layout fallback styles for offline Puppeteer rendering */
+html, body {
+  margin: 0;
+  padding: 0;
+  background: white;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  color: #334155;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pdf-avoid-break {
+  page-break-inside: avoid !important;
+  break-inside: avoid !important;
+}
+
+.pdf-allow-break {
+  page-break-inside: auto !important;
+  break-inside: auto !important;
+}
