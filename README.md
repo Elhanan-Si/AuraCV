@@ -13,7 +13,7 @@ This repository is built as a highly optimized TypeScript monorepo combining a f
 
 ---
 
-## 📸 Screenshots
+## Screenshots
 
 | AuraCV Editor Dashboard | High-Fidelity PDF Export Preview |
 | :---: | :---: |
