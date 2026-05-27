@@ -13,7 +13,15 @@ This repository is built as a highly optimized TypeScript monorepo combining a f
 
 ---
 
-## Features
+## 📸 Screenshots
+
+| 🖥️ AuraCV Editor Dashboard | 📄 High-Fidelity PDF Export Preview |
+| :---: | :---: |
+| ![AuraCV Editor Dashboard](docs/images/auracv_editor.png) | ![AuraCV Exported PDF](docs/images/auracv_resume.png) |
+
+---
+
+## ✨ Features
 
 - **Real-time Reactive Form Editor**: Update personal details, professional experience, education, skills, and languages with instant UI updates.
 - **Modern Visual Templates**: Choose between multiple professionally designed templates (Creative, Professional, Modern, etc.) powered by Tailwind CSS v4.

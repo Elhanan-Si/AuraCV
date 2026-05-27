@@ -43,7 +43,9 @@ export const UI_TRANSLATIONS = {
     themeColor: "צבע ערכת נושא",
     fontFamily: "גופן",
     spacing: "מרווחים",
-    fontSize: "גודל טקסט"
+    fontSize: "גודל טקסט",
+    exportJSON: "שמור קובץ (JSON)",
+    importJSON: "טען קובץ (JSON)"
   },
   en: {
     personalDetails: "Personal Details",
@@ -89,7 +91,9 @@ export const UI_TRANSLATIONS = {
     themeColor: "Theme Color",
     fontFamily: "Font Family",
     spacing: "Document Spacing",
-    fontSize: "Typography Scale"
+    fontSize: "Typography Scale",
+    exportJSON: "Export JSON",
+    importJSON: "Import JSON"
   }
 };
 

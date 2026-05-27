@@ -20,6 +20,7 @@ import {
   PlusCircle, 
   Sparkles,
   Download, 
+  Upload,
   RefreshCw, 
   Trash2,
   Sliders,
@@ -32,6 +33,7 @@ import {
 export const App: React.FC = () => {
   const {
     cvData,
+    setCvData,
     updatePersonalDetails,
     updateSummary,
     updateSettings,
@@ -77,6 +79,54 @@ export const App: React.FC = () => {
   // State to track PDF Generation Loading
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [downloadError, setDownloadError] = useState<string | null>(null);
+
+  const fileInputRef = React.useRef<HTMLInputElement>(null);
+
+  // Export and Import JSON state handlers
+  const handleExportJSON = () => {
+    try {
+      const dataStr = JSON.stringify(cvData, null, 2);
+      const blob = new Blob([dataStr], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      const fileName = `${cvData.personalDetails.firstName || 'AuraCV'}_${cvData.personalDetails.lastName || 'Resume'}.json`;
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      link.parentNode?.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error('Failed to export JSON', err);
+    }
+  };
+
+  const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const result = event.target?.result;
+        if (typeof result !== 'string') return;
+        const parsed = JSON.parse(result);
+        if (parsed && typeof parsed === 'object' && parsed.personalDetails && parsed.settings) {
+          setCvData(parsed);
+          if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+          }
+        } else {
+          throw new Error('Invalid schema structure');
+        }
+      } catch (err) {
+        console.error('Failed to import JSON', err);
+        alert(language === 'he' 
+          ? "קובץ שגוי. אנא ודא שהקובץ הוא קובץ גיבוי תקין של AuraCV." 
+          : "Invalid file structure. Please upload a valid AuraCV JSON backup file.");
+      }
+    };
+    reader.readAsText(file);
+  };
 
   // Trigger PDF backend API stream download
   const handleDownloadPDF = async () => {
@@ -206,6 +256,32 @@ export const App: React.FC = () => {
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">{t.resetForm}</span>
+            </button>
+
+            <div className="h-8 w-px bg-slate-200 hidden md:block self-center mx-1" />
+
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImportJSON}
+              accept=".json"
+              className="hidden"
+            />
+            <button
+              onClick={() => fileInputRef.current?.click()}
+              className="flex items-center gap-1 px-3 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all cursor-pointer shadow-3xs"
+              title={t.importJSON}
+            >
+              <Upload className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{t.importJSON}</span>
+            </button>
+            <button
+              onClick={handleExportJSON}
+              className="flex items-center gap-1 px-3 py-2 text-xs font-bold bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-xl transition-all cursor-pointer shadow-3xs"
+              title={t.exportJSON}
+            >
+              <Download className="w-3.5 h-3.5" />
+              <span className="hidden md:inline">{t.exportJSON}</span>
             </button>
           </div>
 
