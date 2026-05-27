@@ -13,17 +13,17 @@ This repository is built as a highly optimized TypeScript monorepo combining a f
 
 ---
 
-## ✨ Features
+## Features
 
-- 🛠️ **Real-time Reactive Form Editor**: Update personal details, professional experience, education, skills, and languages with instant UI updates.
-- 🎨 **Modern Visual Templates**: Choose between multiple professionally designed templates (Creative, Professional, Modern, etc.) powered by Tailwind CSS v4.
-- 🖨️ **High-Fidelity PDF Export**: Generate 100% ATS-compliant, vector-based, selectable-text PDFs using a server-side headless browser.
-- ⚡ **Tailwind CSS Integration**: Dynamic server-side stylesheet compilation ensures that PDF output matches the web preview down to the pixel.
-- 📦 **Monorepo Architecture**: Clean separation of concerns with a shared type system between the client and server.
+- **Real-time Reactive Form Editor**: Update personal details, professional experience, education, skills, and languages with instant UI updates.
+- **Modern Visual Templates**: Choose between multiple professionally designed templates (Creative, Professional, Modern, etc.) powered by Tailwind CSS v4.
+- **High-Fidelity PDF Export**: Generate 100% ATS-compliant, vector-based, selectable-text PDFs using a server-side headless browser.
+- **Tailwind CSS Integration**: Dynamic server-side stylesheet compilation ensures that PDF output matches the web preview down to the pixel.
+- **Monorepo Architecture**: Clean separation of concerns with a shared type system between the client and server.
 
 ---
 
-## 🏗️ Repository Architecture
+## Repository Architecture
 
 The project is structured as an NPM workspace monorepo:
 
@@ -42,9 +42,9 @@ The project is structured as an NPM workspace monorepo:
 
 ---
 
-## 🚀 Quick Start
+## Quick Start
 
-### 📋 Prerequisites
+### Prerequisites
 
 Ensure you have the following installed on your machine:
 - **Node.js** (v18 or higher recommended)
@@ -80,7 +80,7 @@ npm run dev
 
 ---
 
-## ⚙️ Environment Variables
+## Environment Variables
 
 The project uses environment configurations to run across different ports and hostings. Here are the variables defined in `env.example`:
 
@@ -93,7 +93,7 @@ The project uses environment configurations to run across different ports and ho
 
 ---
 
-## 🚀 Building & Deploying to Production
+## Building & Deploying to Production
 
 To build the monorepo for production:
 
@@ -109,7 +109,7 @@ To build the monorepo for production:
 
 ---
 
-## 🔒 Security & Best Practices
+## Security & Best Practices
 
 - **Base64 Payload Handling**: The server is configured to accept JSON payloads up to `50mb` to handle heavy user profiles and profile pictures in Base64 encoding.
 - **Puppeteer Sandboxing**: Running Puppeteer in containerized environments requires specific flags. The backend launch arguments include `--no-sandbox` and `--disable-setuid-sandbox` for seamless Docker deployment.
@@ -117,7 +117,7 @@ To build the monorepo for production:
 
 ---
 
-## 📄 License & Copyright
+## License & Copyright
 
 This project is licensed under the MIT License. See the [LICENSE](file:///d:/resume_builder/LICENSE) file for details.
 
