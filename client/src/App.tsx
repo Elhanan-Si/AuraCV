@@ -8,6 +8,7 @@ import { SkillsForm } from './components/Editor/SkillsForm';
 import { LanguagesForm } from './components/Editor/LanguagesForm';
 import { CustomSectionsForm } from './components/Editor/CustomSectionsForm';
 import { PreviewFrame } from './components/Preview/PreviewFrame';
+import { TemplateWrapper } from './components/Templates/TemplateWrapper';
 import { COLOR_PALETTES } from './utils/sampleData';
 import { UI_TRANSLATIONS } from './utils/translations';
 import { 
@@ -57,6 +58,27 @@ export const App: React.FC = () => {
 
   const language = cvData.settings.language || 'he';
   const t = UI_TRANSLATIONS[language];
+
+  // Check if we are in Electron hidden print window mode
+  const isPrintWindow = window.location.search.includes('print=true') || (window as any).isPrintMode;
+
+  // Listen for Electron print data
+  React.useEffect(() => {
+    if ((window as any).electron?.onLoadCVData) {
+      return (window as any).electron.onLoadCVData((data: any) => {
+        setCvData(data);
+        (window as any).cvDataReady = true;
+      });
+    }
+  }, [setCvData]);
+
+  if (isPrintWindow) {
+    return (
+      <div className="bg-white min-h-screen w-full overflow-visible">
+        <TemplateWrapper data={cvData} />
+      </div>
+    );
+  }
 
   // Left form active accordion sections management
   const [openSections, setOpenSections] = useState<Record<string, boolean>>({
@@ -128,12 +150,22 @@ export const App: React.FC = () => {
     reader.readAsText(file);
   };
 
-  // Trigger PDF backend API stream download
+  // Trigger PDF backend API stream download (Supports both Desktop Electron print and standard Web API print)
   const handleDownloadPDF = async () => {
     setIsDownloading(true);
     setDownloadError(null);
 
     try {
+      if ((window as any).electron?.generatePDF) {
+        // Native Electron print bridge (Offline Windows app mode)
+        const success = await (window as any).electron.generatePDF(cvData);
+        if (!success) {
+          throw new Error(language === 'he' ? 'יצירת ה-PDF בוטלה או נכשלה.' : 'PDF generation was cancelled or failed.');
+        }
+        return;
+      }
+
+      // Standard Web backend API print
       const response = await fetch('/api/generate-pdf', {
         method: 'POST',
         headers: {

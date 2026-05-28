@@ -1,4 +1,6 @@
 @import "tailwindcss";
+@import "./fonts.css";
+
 
 @layer base {
   /* Premium minimalist scrollbars */

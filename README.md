@@ -88,6 +88,43 @@ npm run dev
 
 ---
 
+## 💻 Local Desktop Application (Windows & macOS)
+
+AuraCV features a native standalone desktop wrapper powered by **Electron**. This allows you to run AuraCV as a fully offline, high-performance desktop application directly on your computer without managing separate server endpoints.
+
+### 🌟 Why use the Desktop App?
+- **100% Offline-First**: Build and edit resumes completely offline. Your personal data is never transmitted over the network; it resides solely on your disk.
+- **Native PDF Rendering**: Uses Chromium's low-level print engine directly inside Electron for crisp, pixel-perfect, vector-based A4 PDF exports.
+- **Auto Font-Caching**: Automatically downloads required Google Fonts locally to ensure templates render correctly, even when completely offline.
+- **Native File Dialogs**: Easily import and export your resume backup `.json` configurations using standard OS Save/Open dialogues.
+
+### 🛠️ Developer Mode & Startup
+To run the desktop application locally in developer mode:
+1. Ensure your Vite development server is running (`npm run dev:client`).
+2. Launch Electron in development mode:
+   ```bash
+   npm run desktop:start
+   ```
+
+### 📦 Packaging Standalone Native Installers
+You can build standalone, zero-dependency executable packages for both Windows and macOS:
+
+#### 🪟 Windows (NSIS Installer)
+Compile a standard Windows installer (`.exe`):
+```bash
+npm run desktop:pack:win
+```
+*Outputs a clean installer setup file in `desktop/dist/` that installs shortcuts on your Desktop and Start Menu.*
+
+#### 🍏 macOS (DMG / ZIP Bundle)
+Compile native macOS application bundles:
+```bash
+npm run desktop:pack:mac
+```
+*Outputs a `.dmg` installer and a `.zip` package in `desktop/dist/` categorized under productivity.*
+
+---
+
 ## Environment Variables
 
 The project uses environment configurations to run across different ports and hostings. Here are the variables defined in `env.example`:
