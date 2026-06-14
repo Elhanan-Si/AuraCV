@@ -1,5 +1,6 @@
 import React from 'react';
 import { CVData } from 'shared/types';
+import { parseMarkdown } from '../../utils/textFormatter';
 
 interface TemplateProps {
   data: CVData;
@@ -45,6 +46,36 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
     spacious: 'py-3'
   }[settings.spacing || 'comfortable'];
 
+  const asidePadding = {
+    compact: 'pt-[12mm] pb-[12mm] ps-[10mm] pe-[8mm]',
+    comfortable: 'pt-[18mm] pb-[18mm] ps-[14mm] pe-[10mm]',
+    spacious: 'pt-[24mm] pb-[24mm] ps-[18mm] pe-[12mm]'
+  }[settings.spacing || 'comfortable'];
+
+  const mainPadding = {
+    compact: 'pt-[12mm] pb-[12mm] pe-[10mm] ps-[8mm]',
+    comfortable: 'pt-[18mm] pb-[18mm] pe-[14mm] ps-[10mm]',
+    spacious: 'pt-[24mm] pb-[24mm] pe-[18mm] ps-[12mm]'
+  }[settings.spacing || 'comfortable'];
+
+  const asideGap = {
+    compact: 'gap-y-4',
+    comfortable: 'gap-y-6',
+    spacious: 'gap-y-8'
+  }[settings.spacing || 'comfortable'];
+
+  const mainGap = {
+    compact: 'gap-y-4',
+    comfortable: 'gap-y-6',
+    spacious: 'gap-y-8'
+  }[settings.spacing || 'comfortable'];
+
+  const leadingStyle = {
+    compact: 'leading-normal',
+    comfortable: 'leading-relaxed',
+    spacious: 'leading-loose'
+  }[settings.spacing || 'comfortable'];
+
   const fontFamilies = {
     'Rubik': 'font-["Rubik"]',
     'Assistant': 'font-["Assistant"]',
@@ -73,10 +104,10 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
   return (
     <article 
       dir={isRTL ? 'rtl' : 'ltr'}
-      className={`${currentFontFamily} ${fontSizes.body} leading-relaxed text-slate-700 bg-white w-full h-full p-0 flex relative text-start`}
+      className={`${currentFontFamily} ${fontSizes.body} ${leadingStyle} text-slate-700 bg-white w-full h-full p-0 flex relative text-start`}
     >
-      {/* Sidebar - Creative Color panel (Occupies 35% width) */}
-      <aside className="w-[35%] bg-slate-50 border-e border-slate-100 flex flex-col pt-[20mm] pb-[20mm] ps-[15mm] pe-[10mm] box-border relative select-none">
+      {/* Sidebar - Creative Color panel (Occupies 28% width) */}
+      <aside className={`w-[28%] bg-slate-50 border-e border-slate-100 flex flex-col ${asidePadding} box-border relative select-none`}>
         {/* Sidebar Highlight Line */}
         <div className="absolute top-0 left-0 right-0 h-2" style={{ backgroundColor: activeColor }} />
 
@@ -93,7 +124,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
           </div>
         )}
 
-        <div className={`flex flex-col gap-y-6 ${!personalDetails.photo ? 'mt-4' : ''}`}>
+        <div className={`flex flex-col ${asideGap} ${!personalDetails.photo ? 'mt-4' : ''}`}>
           {/* Details Section */}
           <section className="pdf-avoid-break">
             <h2 className={`${fontSizes.title} font-extrabold uppercase tracking-wide mb-3 flex items-center gap-1.5`} style={{ color: activeColor }}>
@@ -184,11 +215,33 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
               </ul>
             </section>
           )}
+
+          {/* Testimonials */}
+          {data.testimonials && data.testimonials.length > 0 && (
+            <section className="pdf-avoid-break">
+              <h2 className={`${fontSizes.title} font-extrabold uppercase tracking-wide mb-3`} style={{ color: activeColor }}>
+                {isRTL ? 'ממליצים' : 'References'}
+              </h2>
+              <ul className="space-y-3 text-xs text-start">
+                {data.testimonials.map(item => (
+                  <li key={item.id} className="flex flex-col border-b border-slate-100 pb-1.5 last:border-0 last:pb-0">
+                    <span className="font-bold text-slate-800">{item.name}</span>
+                    {item.title && <span className="text-slate-500 italic text-[11px]">{item.title}</span>}
+                    {item.phone && (
+                      <span className="text-slate-600 font-semibold font-mono text-[10px] mt-0.5" dir="ltr">
+                        {item.phone}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </div>
       </aside>
 
-      {/* Main Panel (Occupies 65% width) - logical padding classes */}
-      <main className="w-[65%] flex flex-col pt-[20mm] pb-[20mm] pe-[15mm] ps-[10mm] box-border gap-y-6 flex-grow">
+      {/* Main Panel (Occupies 72% width) - logical padding classes */}
+      <main className={`w-[72%] flex flex-col ${mainPadding} box-border ${mainGap} flex-grow`}>
         {/* Name and Header Block */}
         <section className="pdf-avoid-break">
           <h1 className={`${fontSizes.name} font-black tracking-tight text-slate-800 uppercase leading-none`}>
@@ -205,7 +258,7 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
         {summary && (
           <section className="pdf-avoid-break border-s-4 ps-4" style={{ borderColor: activeColor }}>
             <p className="text-slate-600 text-justify text-xs sm:text-sm">
-              {summary}
+              {parseMarkdown(summary)}
             </p>
           </section>
         )}
@@ -225,30 +278,28 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
                     style={{ backgroundColor: activeColor }} 
                   />
                   
-                  <div className="pdf-avoid-break mb-1">
-                    <h3 className="font-bold text-slate-800 leading-tight">
-                      {work.jobTitle}
-                    </h3>
-                    {(work.employer || [work.city, work.country].filter(Boolean).length > 0 || work.startDate || work.endDate || work.current) && (
-                      <div className="flex justify-between items-baseline flex-wrap text-xs font-semibold">
-                        {(work.employer || [work.city, work.country].filter(Boolean).length > 0) && (
-                          <span style={{ color: activeColor }}>
-                            {work.employer}{[work.city, work.country].filter(Boolean).length > 0 ? `, ${[work.city, work.country].filter(Boolean).join(', ')}` : ''}
-                          </span>
-                        )}
-                        {(work.startDate || work.endDate || work.current) && (
-                          <span className="text-slate-400 font-medium">
-                            {work.startDate ? formatDate(work.startDate) : ''}
-                            {work.startDate && (work.endDate || work.current) ? ' – ' : ''}
-                            {work.current ? (isRTL ? 'היום' : 'Present') : (work.endDate ? formatDate(work.endDate) : '')}
-                          </span>
-                        )}
-                      </div>
+                  <div className="pdf-avoid-break flex justify-between items-baseline mb-1">
+                    <div>
+                      <h3 className="font-bold text-slate-800 leading-tight inline-block">
+                        {work.jobTitle}
+                      </h3>
+                      {(work.employer || [work.city, work.country].filter(Boolean).length > 0) && (
+                        <span className="font-semibold text-xs ml-2 mr-2" style={{ color: activeColor }}>
+                          {work.employer}{[work.city, work.country].filter(Boolean).length > 0 ? `, ${[work.city, work.country].filter(Boolean).join(', ')}` : ''}
+                        </span>
+                      )}
+                    </div>
+                    {(work.startDate || work.endDate || work.current) && (
+                      <span className="text-slate-400 font-semibold text-xs whitespace-nowrap">
+                        {work.startDate ? formatDate(work.startDate) : ''}
+                        {work.startDate && (work.endDate || work.current) ? ' – ' : ''}
+                        {work.current ? (isRTL ? 'היום' : 'Present') : (work.endDate ? formatDate(work.endDate) : '')}
+                      </span>
                     )}
                   </div>
                   {work.description && (
                     <p className="text-slate-600 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break text-justify">
-                      {work.description}
+                      {parseMarkdown(work.description)}
                     </p>
                   )}
                 </div>
@@ -271,30 +322,28 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
                     style={{ backgroundColor: activeColor }} 
                   />
                   
-                  <div className="pdf-avoid-break mb-1">
-                    <h3 className="font-bold text-slate-800 leading-tight">
-                      {edu.degree}
-                    </h3>
-                    {(edu.institution || [edu.city, edu.country].filter(Boolean).length > 0 || edu.startDate || edu.endDate || edu.current) && (
-                      <div className="flex justify-between items-baseline flex-wrap text-xs font-semibold">
-                        {(edu.institution || [edu.city, edu.country].filter(Boolean).length > 0) && (
-                          <span style={{ color: activeColor }}>
-                            {edu.institution}{[edu.city, edu.country].filter(Boolean).length > 0 ? `, ${[edu.city, edu.country].filter(Boolean).join(', ')}` : ''}
-                          </span>
-                        )}
-                        {(edu.startDate || edu.endDate || edu.current) && (
-                          <span className="text-slate-400 font-medium">
-                            {edu.startDate ? formatDate(edu.startDate) : ''}
-                            {edu.startDate && (edu.endDate || edu.current) ? ' – ' : ''}
-                            {edu.current ? (isRTL ? 'היום' : 'Present') : (edu.endDate ? formatDate(edu.endDate) : '')}
-                          </span>
-                        )}
-                      </div>
+                  <div className="pdf-avoid-break flex justify-between items-baseline mb-1">
+                    <div>
+                      <h3 className="font-bold text-slate-800 leading-tight inline-block">
+                        {edu.degree}
+                      </h3>
+                      {(edu.institution || [edu.city, edu.country].filter(Boolean).length > 0) && (
+                        <span className="font-semibold text-xs ml-2 mr-2" style={{ color: activeColor }}>
+                          {edu.institution}{[edu.city, edu.country].filter(Boolean).length > 0 ? `, ${[edu.city, edu.country].filter(Boolean).join(', ')}` : ''}
+                        </span>
+                      )}
+                    </div>
+                    {(edu.startDate || edu.endDate || edu.current) && (
+                      <span className="text-slate-400 font-semibold text-xs whitespace-nowrap">
+                        {edu.startDate ? formatDate(edu.startDate) : ''}
+                        {edu.startDate && (edu.endDate || edu.current) ? ' – ' : ''}
+                        {edu.current ? (isRTL ? 'היום' : 'Present') : (edu.endDate ? formatDate(edu.endDate) : '')}
+                      </span>
                     )}
                   </div>
                   {edu.description && (
                     <p className="text-slate-600 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break">
-                      {edu.description}
+                      {parseMarkdown(edu.description)}
                     </p>
                   )}
                 </div>
@@ -319,28 +368,26 @@ export const CreativeTemplate: React.FC<TemplateProps> = ({ data }) => {
                       style={{ backgroundColor: activeColor }} 
                     />
                     
-                    <div className="pdf-avoid-break mb-1">
-                      <h3 className="font-bold text-slate-800 leading-tight">
-                        {item.title}
-                      </h3>
-                      {(item.subtitle || item.date) && (
-                        <div className="flex justify-between items-baseline flex-wrap text-xs font-semibold">
-                          {item.subtitle && (
-                            <span className="italic text-slate-600">
-                              {item.subtitle}
-                            </span>
-                          )}
-                          {item.date && (
-                            <span className="text-slate-400 font-medium">
-                              {item.date}
-                            </span>
-                          )}
-                        </div>
+                    <div className="pdf-avoid-break flex justify-between items-baseline mb-1">
+                      <div>
+                        <h3 className="font-bold text-slate-800 leading-tight inline-block">
+                          {item.title}
+                        </h3>
+                        {item.subtitle && (
+                          <span className="italic text-slate-600 text-xs ml-2 mr-2">
+                            {item.subtitle}
+                          </span>
+                        )}
+                      </div>
+                      {item.date && (
+                        <span className="text-slate-400 font-semibold text-xs whitespace-nowrap">
+                          {item.date}
+                        </span>
                       )}
                     </div>
                     {item.description && (
                       <p className="text-slate-600 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break">
-                        {item.description}
+                        {parseMarkdown(item.description)}
                       </p>
                     )}
                   </div>

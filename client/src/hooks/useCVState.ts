@@ -9,7 +9,11 @@ export const useCVState = () => {
     try {
       const stored = localStorage.getItem(LOCAL_STORAGE_KEY);
       if (stored) {
-        return JSON.parse(stored);
+        const parsed = JSON.parse(stored);
+        return {
+          ...parsed,
+          testimonials: parsed.testimonials || []
+        };
       }
     } catch (e) {
       console.error('Failed to load CV data from localStorage', e);
@@ -63,8 +67,8 @@ export const useCVState = () => {
     });
   };
 
-  // Generic List operations (Work, Education, Skills, Languages)
-  const addListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages'>(
+  // Generic List operations (Work, Education, Skills, Languages, Testimonials)
+  const addListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages' | 'testimonials'>(
     key: K,
     item: any
   ) => {
@@ -74,7 +78,7 @@ export const useCVState = () => {
     }));
   };
 
-  const updateListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages'>(
+  const updateListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages' | 'testimonials'>(
     key: K,
     id: string,
     field: string,
@@ -82,29 +86,29 @@ export const useCVState = () => {
   ) => {
     setCvData(prev => ({
       ...prev,
-      [key]: prev[key].map((item: any) => 
+      [key]: (prev[key] || []).map((item: any) => 
         item.id === id ? { ...item, [field]: value } : item
       )
     }));
   };
 
-  const deleteListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages'>(
+  const deleteListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages' | 'testimonials'>(
     key: K,
     id: string
   ) => {
     setCvData(prev => ({
       ...prev,
-      [key]: prev[key].filter((item: any) => item.id !== id)
+      [key]: (prev[key] || []).filter((item: any) => item.id !== id)
     }));
   };
 
-  const moveListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages'>(
+  const moveListItem = <K extends 'workExperience' | 'education' | 'skills' | 'languages' | 'testimonials'>(
     key: K,
     index: number,
     direction: 'up' | 'down'
   ) => {
     setCvData(prev => {
-      const items = [...prev[key]];
+      const items = [...(prev[key] || [])];
       const targetIndex = direction === 'up' ? index - 1 : index + 1;
       
       if (targetIndex < 0 || targetIndex >= items.length) return prev;
@@ -275,6 +279,7 @@ export const useCVState = () => {
       skills: [],
       languages: [],
       customSections: [],
+      testimonials: [],
       settings: {
         templateId: prev.settings.templateId,
         language: prev.settings.language,

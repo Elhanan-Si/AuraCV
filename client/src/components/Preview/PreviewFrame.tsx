@@ -20,7 +20,7 @@ export const PreviewFrame: React.FC<PreviewFrameProps> = ({ data }) => {
         const pageWidth = pageRef.current.clientWidth;
         if (containerWidth > 0 && pageWidth > 0) {
           const fitScale = containerWidth / pageWidth;
-          setZoom(Math.max(0.4, Math.min(1.2, parseFloat(fitScale.toFixed(2)))));
+          setZoom(Math.max(0.4, Math.min(2.0, parseFloat(fitScale.toFixed(2)))));
         }
       }
     };
@@ -35,14 +35,14 @@ export const PreviewFrame: React.FC<PreviewFrameProps> = ({ data }) => {
     };
   }, []);
 
-  const handleZoomIn = () => setZoom(prev => Math.min(1.5, parseFloat((prev + 0.1).toFixed(1))));
+  const handleZoomIn = () => setZoom(prev => Math.min(2.5, parseFloat((prev + 0.1).toFixed(1))));
   const handleZoomOut = () => setZoom(prev => Math.max(0.4, parseFloat((prev - 0.1).toFixed(1))));
   const handleZoomReset = () => {
     if (containerRef.current && pageRef.current) {
       const containerWidth = containerRef.current.clientWidth - 48;
       const pageWidth = pageRef.current.clientWidth;
       const fitScale = containerWidth / pageWidth;
-      setZoom(Math.max(0.4, Math.min(1.2, parseFloat(fitScale.toFixed(2)))));
+      setZoom(Math.max(0.4, Math.min(2.0, parseFloat(fitScale.toFixed(2)))));
     }
   };
 
@@ -91,13 +91,32 @@ export const PreviewFrame: React.FC<PreviewFrameProps> = ({ data }) => {
         {/* Aspect locked A4 Page Box */}
         <div 
           ref={pageRef}
-          className="bg-white a4-preview-shadow w-[210mm] min-h-[297mm] transition-transform duration-200 ease-out origin-top flex-shrink-0"
+          className="bg-white a4-preview-shadow w-[210mm] min-h-[297mm] transition-transform duration-200 ease-out origin-top flex-shrink-0 relative"
           style={{ 
             transform: `scale(${zoom})`,
             marginBottom: `calc((297mm * (${zoom} - 1)) + 24px)` // Offset bottom whitespace margins
           }}
         >
           <TemplateWrapper data={data} />
+          
+          {/* Visual page break indicator lines for real-time editor awareness */}
+          <div className="absolute inset-0 pointer-events-none overflow-hidden select-none">
+            <div className="absolute top-[297mm] left-0 right-0 border-t-2 border-dashed border-red-400/80 z-20 flex items-center justify-center">
+              <span className="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm mt-[-8px]">
+                {data.settings.language === 'he' ? 'גבול עמוד 1 / עמוד 2' : 'Page 1 / Page 2 Break'}
+              </span>
+            </div>
+            <div className="absolute top-[594mm] left-0 right-0 border-t-2 border-dashed border-red-400/80 z-20 flex items-center justify-center">
+              <span className="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm mt-[-8px]">
+                {data.settings.language === 'he' ? 'גבול עמוד 2 / עמוד 3' : 'Page 2 / Page 3 Break'}
+              </span>
+            </div>
+            <div className="absolute top-[891mm] left-0 right-0 border-t-2 border-dashed border-red-400/80 z-20 flex items-center justify-center">
+              <span className="bg-red-500 text-white text-[9px] px-2 py-0.5 rounded-full font-bold uppercase tracking-wider shadow-sm mt-[-8px]">
+                {data.settings.language === 'he' ? 'גבול עמוד 3 / עמוד 4' : 'Page 3 / Page 4 Break'}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

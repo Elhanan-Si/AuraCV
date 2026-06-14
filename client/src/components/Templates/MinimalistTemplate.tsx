@@ -1,5 +1,6 @@
 import React from 'react';
 import { CVData } from 'shared/types';
+import { parseMarkdown } from '../../utils/textFormatter';
 
 interface TemplateProps {
   data: CVData;
@@ -45,6 +46,24 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
     spacious: 'py-2.5'
   }[settings.spacing || 'comfortable'];
 
+  const pagePadding = {
+    compact: 'p-[12mm]',
+    comfortable: 'p-[16mm]',
+    spacious: 'p-[22mm]'
+  }[settings.spacing || 'comfortable'];
+
+  const blockGap = {
+    compact: 'gap-y-3.5',
+    comfortable: 'gap-y-5',
+    spacious: 'gap-y-7'
+  }[settings.spacing || 'comfortable'];
+
+  const leadingStyle = {
+    compact: 'leading-normal',
+    comfortable: 'leading-relaxed',
+    spacious: 'leading-loose'
+  }[settings.spacing || 'comfortable'];
+
   const fontFamilies = {
     'Rubik': 'font-["Rubik"]',
     'Assistant': 'font-["Assistant"]',
@@ -81,7 +100,7 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
   return (
     <article 
       dir={isRTL ? 'rtl' : 'ltr'}
-      className={`${currentFontFamily} ${fontSizes.body} leading-relaxed text-slate-600 bg-white w-full h-full p-[20mm] box-border flex flex-col gap-y-5 select-text text-start`}
+      className={`${currentFontFamily} ${fontSizes.body} ${leadingStyle} text-slate-600 bg-white w-full h-full ${pagePadding} box-border flex flex-col ${blockGap} select-text text-start`}
     >
       
       {/* Header section (strictly centered and highly elegant) */}
@@ -120,7 +139,7 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
       {summary && (
         <section className="pdf-avoid-break text-center max-w-3xl mx-auto">
           <p className="text-slate-500 leading-relaxed italic text-xs sm:text-sm">
-            "{summary}"
+            "{parseMarkdown(summary)}"
           </p>
         </section>
       )}
@@ -158,7 +177,7 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
                 </div>
                 {work.description && (
                   <p className="text-slate-500 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break text-justify">
-                    {work.description}
+                    {parseMarkdown(work.description)}
                   </p>
                 )}
               </div>
@@ -200,7 +219,7 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
                 </div>
                 {edu.description && (
                   <p className="text-slate-500 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break">
-                    {edu.description}
+                    {parseMarkdown(edu.description)}
                   </p>
                 )}
               </div>
@@ -278,7 +297,7 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
                   </div>
                   {item.description && (
                     <p className="text-slate-500 mt-1 whitespace-pre-line text-xs sm:text-sm pdf-allow-break">
-                      {item.description}
+                      {parseMarkdown(item.description)}
                     </p>
                   )}
                 </div>
@@ -287,6 +306,28 @@ export const MinimalistTemplate: React.FC<TemplateProps> = ({ data }) => {
           </section>
         );
       })}
+
+      {/* Testimonials */}
+      {data.testimonials && data.testimonials.length > 0 && (
+        <section className="pdf-avoid-break">
+          <h2 className={`${fontSizes.title} font-bold text-slate-800 uppercase tracking-widest border-b pb-1 mb-1.5`} style={{ borderColor: activeColor }}>
+            {isRTL ? 'ממליצים' : 'References'}
+          </h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs sm:text-sm text-slate-500 text-start">
+            {data.testimonials.map(item => (
+              <div key={item.id} className="flex flex-col">
+                <span className="font-semibold text-slate-700">{item.name}</span>
+                {item.title && <span className="text-slate-400 italic text-xs">{item.title}</span>}
+                {item.phone && (
+                  <span className="text-slate-500 font-mono text-xs mt-0.5" dir="ltr">
+                    {item.phone}
+                  </span>
+                )}
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
     </article>
   );
 };

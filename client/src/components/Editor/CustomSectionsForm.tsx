@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { CustomSection, CustomSectionItem } from 'shared/types';
-import { Plus, Trash2, ArrowUp, ArrowDown, ChevronDown, Award, HelpCircle } from 'lucide-react';
+import { Plus, Trash2, ArrowUp, ArrowDown, ChevronDown, Award, HelpCircle, PlusCircle } from 'lucide-react';
 import { UI_TRANSLATIONS } from '../../utils/translations';
+import { RichTextEditor } from './RichTextEditor';
 
 interface CustomSectionsFormProps {
   sections: CustomSection[];
@@ -218,13 +219,12 @@ export const CustomSectionsForm: React.FC<CustomSectionsFormProps> = ({
                                   </div>
                                   <div className="sm:col-span-2">
                                     <label className={labelClass}>{language === 'he' ? "תיאור" : "Description"}</label>
-                                    <textarea
-                                      rows={3}
-                                      placeholder={language === 'he' ? "פרטים והסברים נוספים..." : "Provide an overview, credentials ID, or key details..."}
-                                      className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-hidden text-xs bg-slate-50 focus:bg-white text-slate-800 resize-y leading-relaxed font-normal text-start"
-                                      value={item.description || ''}
-                                      onChange={(e) => onUpdateItem(section.id, item.id, 'description', e.target.value)}
-                                    />
+                                     <RichTextEditor
+                                       rows={3}
+                                       placeholder={language === 'he' ? "פרטים והסברים נוספים..." : "Provide an overview, credentials ID, or key details..."}
+                                       value={item.description || ''}
+                                       onChange={(val) => onUpdateItem(section.id, item.id, 'description', val)}
+                                     />
                                   </div>
                                 </div>
                               </div>

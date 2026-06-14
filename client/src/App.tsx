@@ -7,6 +7,7 @@ import { ExperienceForm } from './components/Editor/ExperienceForm';
 import { SkillsForm } from './components/Editor/SkillsForm';
 import { LanguagesForm } from './components/Editor/LanguagesForm';
 import { CustomSectionsForm } from './components/Editor/CustomSectionsForm';
+import { TestimonialsForm } from './components/Editor/TestimonialsForm';
 import { PreviewFrame } from './components/Preview/PreviewFrame';
 import { TemplateWrapper } from './components/Templates/TemplateWrapper';
 import { COLOR_PALETTES } from './utils/sampleData';
@@ -20,6 +21,7 @@ import {
   Languages, 
   PlusCircle, 
   Sparkles,
+  Users,
   Download, 
   Upload,
   RefreshCw, 
@@ -88,7 +90,8 @@ export const App: React.FC = () => {
     education: false,
     skills: false,
     languages: false,
-    custom: false
+    custom: false,
+    testimonials: false
   });
 
   const toggleSection = (section: string) => {
@@ -619,6 +622,22 @@ export const App: React.FC = () => {
                 onUpdateItem={updateCustomSectionItem}
                 onDeleteItem={deleteCustomSectionItem}
                 onMoveItem={moveCustomSectionItem}
+              />
+            </AccordionSection>
+
+            <AccordionSection
+               title={t.testimonials}
+               icon={<Users className="w-4 h-4" />}
+               isOpen={openSections.testimonials}
+               onToggle={() => toggleSection('testimonials')}
+            >
+              <TestimonialsForm
+                items={cvData.testimonials || []}
+                language={language}
+                onAdd={(item) => addListItem('testimonials', item)}
+                onUpdate={(id, field, value) => updateListItem('testimonials', id, field, value)}
+                onDelete={(id) => deleteListItem('testimonials', id)}
+                onMove={(idx, dir) => moveListItem('testimonials', idx, dir)}
               />
             </AccordionSection>
 

@@ -24,6 +24,8 @@ This repository is built as a highly optimized TypeScript monorepo combining a f
 ## Features
 
 - **Real-time Reactive Form Editor**: Update personal details, professional experience, education, skills, and languages with instant UI updates.
+- **WYSIWYG Rich Text Editor**: Format text dynamically (bold, italic, underline, highlight selection) in Summary, Work Experience, Education, and Custom Sections with Markdown compatibility.
+- **Structured References & Testimonials**: Dedicated manager to add, edit, and reorder professional recommendations (Name, Title, and Phone Number) displayed beautifully on the resume.
 - **Modern Visual Templates**: Choose between multiple professionally designed templates (Creative, Professional, Modern, etc.) powered by Tailwind CSS v4.
 - **High-Fidelity PDF Export**: Generate 100% ATS-compliant, vector-based, selectable-text PDFs using a server-side headless browser.
 - **Tailwind CSS Integration**: Dynamic server-side stylesheet compilation ensures that PDF output matches the web preview down to the pixel.

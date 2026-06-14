@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { WorkExperience, Education } from 'shared/types';
 import { Plus, Trash2, ArrowUp, ArrowDown, ChevronDown, Briefcase, GraduationCap } from 'lucide-react';
 import { UI_TRANSLATIONS } from '../../utils/translations';
+import { RichTextEditor } from './RichTextEditor';
 
 interface ExperienceFormProps {
   type: 'work' | 'education';
@@ -245,16 +246,15 @@ export const ExperienceForm: React.FC<ExperienceFormProps> = ({
 
                     <div className="sm:col-span-2">
                       <label className={labelClass}>{t.description}</label>
-                      <textarea
+                      <RichTextEditor
                         rows={5}
-                        className="w-full px-3 py-1.5 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition-all outline-hidden text-xs bg-slate-50 focus:bg-white text-slate-800 resize-y leading-relaxed font-normal text-start"
                         placeholder={
                           type === 'work'
                             ? (language === 'he' ? "• הובלתי צוות מפתחים...\n• אופטימיזציה של מסדי נתונים..." : "• Led the frontend team...\n• Optimized response rates by 25%...")
                             : (language === 'he' ? "• התמחות במערכות מבוזרות...\n• סיום תואר בהצטיינות..." : "• Specialized in database design...\n• Graduated with top marks...")
                         }
                         value={item.description || ''}
-                        onChange={(e) => onUpdate(item.id, 'description', e.target.value)}
+                        onChange={(val) => onUpdate(item.id, 'description', val)}
                       />
                     </div>
                   </div>

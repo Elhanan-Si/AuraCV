@@ -1,5 +1,6 @@
 import React from 'react';
 import { CVData } from 'shared/types';
+import { parseMarkdown } from '../../utils/textFormatter';
 
 interface TemplateProps {
   data: CVData;
@@ -52,6 +53,30 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
     spacious: 'py-3'
   }[settings.spacing || 'comfortable'];
 
+  const pagePadding = {
+    compact: 'p-[12mm]',
+    comfortable: 'p-[16mm]',
+    spacious: 'p-[22mm]'
+  }[settings.spacing || 'comfortable'];
+
+  const mainGap = {
+    compact: 'gap-y-3',
+    comfortable: 'gap-y-4',
+    spacious: 'gap-y-6'
+  }[settings.spacing || 'comfortable'];
+
+  const asideGap = {
+    compact: 'gap-y-3',
+    comfortable: 'gap-y-4',
+    spacious: 'gap-y-6'
+  }[settings.spacing || 'comfortable'];
+
+  const leadingStyle = {
+    compact: 'leading-normal',
+    comfortable: 'leading-relaxed',
+    spacious: 'leading-loose'
+  }[settings.spacing || 'comfortable'];
+
   const fontFamilies = {
     'Rubik': 'font-["Rubik"]',
     'Assistant': 'font-["Assistant"]',
@@ -81,7 +106,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
   return (
     <article 
       dir={isRTL ? 'rtl' : 'ltr'}
-      className={`${currentFontFamily} ${fontSizes.body} leading-relaxed text-slate-700 bg-white w-full h-full p-[20mm] box-border relative flex flex-col text-start`}
+      className={`${currentFontFamily} ${fontSizes.body} ${leadingStyle} text-slate-700 bg-white w-full h-full ${pagePadding} box-border relative flex flex-col text-start`}
     >
       {/* Header Profile Panel */}
       <header className="border-b-2 pb-5 flex justify-between items-center" style={{ borderColor: activeColor }}>
@@ -110,8 +135,8 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
 
       {/* Main Two-Column Layout */}
       <div className={`grid grid-cols-12 ${spacingStyles} flex-grow`}>
-        {/* Sidebar (Occupies 35% Width - 4 cols) - logical border-e and padding-e */}
-        <aside className="col-span-4 border-e border-slate-200 pe-5 flex flex-col gap-y-4">
+        {/* Sidebar (Occupies 25% Width - 3 cols) - logical border-e and padding-e */}
+        <aside className={`col-span-3 border-e border-slate-200 pe-5 flex flex-col ${asideGap}`}>
           {/* Contact Details */}
           <section className="pdf-avoid-break">
             <h2 className={`${fontSizes.title} font-bold text-slate-800 uppercase tracking-wider mb-2 flex items-center`}>
@@ -209,10 +234,32 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
               </ul>
             </section>
           )}
+
+          {/* Testimonials */}
+          {data.testimonials && data.testimonials.length > 0 && (
+            <section className="pdf-avoid-break">
+              <h2 className={`${fontSizes.title} font-bold text-slate-800 uppercase tracking-wider mb-2`}>
+                {isRTL ? 'ממליצים' : 'References'}
+              </h2>
+              <ul className="space-y-2 text-xs">
+                {data.testimonials.map(item => (
+                  <li key={item.id} className="flex flex-col border-b border-slate-100 pb-1.5 last:border-0 last:pb-0">
+                    <span className="font-bold text-slate-700">{item.name}</span>
+                    {item.title && <span className="text-slate-500 italic text-[11px]">{item.title}</span>}
+                    {item.phone && (
+                      <span className="text-slate-600 font-semibold font-mono text-[10px] mt-0.5" dir="ltr">
+                        {item.phone}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
         </aside>
 
-        {/* Right Main Panel (65% Width - 8 cols) - logical padding-s */}
-        <main className="col-span-8 ps-5 flex flex-col gap-y-4">
+        {/* Right Main Panel (75% Width - 9 cols) - logical padding-s */}
+        <main className={`col-span-9 ps-5 flex flex-col ${mainGap}`}>
           {/* Professional Summary */}
           {summary && (
             <section className="pdf-avoid-break">
@@ -220,7 +267,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                 {isRTL ? 'תקציר מקצועי' : 'Profile'}
               </h2>
               <p className="text-slate-600 text-justify">
-                {summary}
+                {parseMarkdown(summary)}
               </p>
             </section>
           )}
@@ -255,7 +302,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                     </div>
                     {work.description && (
                       <p className="text-slate-600 mt-1 whitespace-pre-line pdf-allow-break text-justify">
-                        {work.description}
+                        {parseMarkdown(work.description)}
                       </p>
                     )}
                   </div>
@@ -294,7 +341,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                     </div>
                     {edu.description && (
                       <p className="text-slate-600 mt-1 whitespace-pre-line pdf-allow-break">
-                        {edu.description}
+                        {parseMarkdown(edu.description)}
                       </p>
                     )}
                   </div>
@@ -333,7 +380,7 @@ export const ProfessionalTemplate: React.FC<TemplateProps> = ({ data }) => {
                       </div>
                       {item.description && (
                         <p className="text-slate-600 mt-1 whitespace-pre-line pdf-allow-break">
-                          {item.description}
+                          {parseMarkdown(item.description)}
                         </p>
                       )}
                     </div>

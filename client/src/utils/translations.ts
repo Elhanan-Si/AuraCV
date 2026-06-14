@@ -45,7 +45,12 @@ export const UI_TRANSLATIONS = {
     spacing: "מרווחים",
     fontSize: "גודל טקסט",
     exportJSON: "שמור קובץ (JSON)",
-    importJSON: "טען קובץ (JSON)"
+    importJSON: "טען קובץ (JSON)",
+    testimonials: "ממליצים",
+    addTestimonial: "הוסף ממליץ",
+    testimonialName: "שם הממליץ",
+    testimonialTitle: "תפקיד / כותרת",
+    testimonialPhone: "מספר טלפון"
   },
   en: {
     personalDetails: "Personal Details",
@@ -93,7 +98,12 @@ export const UI_TRANSLATIONS = {
     spacing: "Document Spacing",
     fontSize: "Typography Scale",
     exportJSON: "Export JSON",
-    importJSON: "Import JSON"
+    importJSON: "Import JSON",
+    testimonials: "References",
+    addTestimonial: "Add Reference",
+    testimonialName: "Name",
+    testimonialTitle: "Title / Affiliation",
+    testimonialPhone: "Phone Number"
   }
 };
 

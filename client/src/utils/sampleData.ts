@@ -107,6 +107,20 @@ export const SAMPLE_HEBREW_DATA: CVData = {
       ]
     }
   ],
+  testimonials: [
+    {
+      id: "test-1",
+      name: "ד\"ר שרה כהן",
+      title: "דירקטורית פיתוח ב-TechVanguard Solutions",
+      phone: "+1 (555) 019-2834"
+    },
+    {
+      id: "test-2",
+      name: "מיכאל לוי",
+      title: "ר”צ פרונט-אנד ב-CloudNova Systems",
+      phone: "+1 (555) 014-9876"
+    }
+  ],
   settings: {
     templateId: "professional",
     language: "he", // Hebrew as default RTL mode (Constraint #1)
@@ -224,6 +238,20 @@ export const SAMPLE_ENGLISH_DATA: CVData = {
           description: "Developed an AI-driven automated code review assistant in 48 hours, selected as 1st place among 64 competing teams."
         }
       ]
+    }
+  ],
+  testimonials: [
+    {
+      id: "test-1",
+      name: "Dr. Sarah Cohen",
+      title: "Director of Engineering at TechVanguard Solutions",
+      phone: "+1 (555) 019-2834"
+    },
+    {
+      id: "test-2",
+      name: "Michael Levi",
+      title: "Frontend Team Lead at CloudNova Systems",
+      phone: "+1 (555) 014-9876"
     }
   ],
   settings: {

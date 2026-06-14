@@ -73,6 +73,13 @@ export interface CustomSection {
   items: CustomSectionItem[];
 }
 
+export interface Testimonial {
+  id: string;
+  name: string;
+  title: string;
+  phone: string;
+}
+
 export interface CVSettings {
   templateId: 'professional' | 'creative' | 'minimalist';
   language: 'he' | 'en'; // Dynamic toggle field supporting RTL/LTR layouts
@@ -93,5 +100,7 @@ export interface CVData {
   skills: Skill[];
   languages: Language[];
   customSections: CustomSection[];
+  testimonials?: Testimonial[];
   settings: CVSettings;
 }
+
